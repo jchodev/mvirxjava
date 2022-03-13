@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">MviRxJava</string>
+    <string name="retry">retry</string>
+</resources>
