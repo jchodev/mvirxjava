@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import com.jerry.mvirxjava.data.model.Product
 import com.jerry.mvirxjava.base.ViewState
 import com.jerry.mvirxjava.data.model.ProductListResponse
+import com.jerry.mvirxjava.data.repository.local.MyRespository
 import com.jerry.mvirxjava.ui.productlist.intent.ProductListIntent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Observable
@@ -21,7 +22,8 @@ import io.reactivex.functions.BiFunction
 
 @HiltViewModel
 class ProductListViewModel @Inject constructor(
-    private val networkRepository : NetworkRepository
+    private val networkRepository : NetworkRepository,
+    private val myRespository: MyRespository
 ) : ViewModel()  {
     private val disposables = CompositeDisposable()
     private val _viewState: MutableLiveData<ViewState<List<Product>>> = MutableLiveData<ViewState<List<Product>>>()
@@ -29,6 +31,7 @@ class ProductListViewModel @Inject constructor(
 
     init {
         getProductList()
+        System.out.println("jerry>>" + myRespository.getSomething())
     }
 
     fun sendIntent(intent : ProductListIntent) {

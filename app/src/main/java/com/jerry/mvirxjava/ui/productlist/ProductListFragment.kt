@@ -40,6 +40,18 @@ class ProductListFragment : BaseFragment(R.layout.fragment_product_list) {
             adapter = productAdapter
         }
 
+        _binding?.btnTest?.setOnClickListener {
+            try {
+                val i = Integer.valueOf("A")
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
+
+        _binding?.btnTestWithoutTry?.setOnClickListener {
+           // val i = Integer.valueOf("A")
+        }
+
         viewModelObserve()
     }
 
