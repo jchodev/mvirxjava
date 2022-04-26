@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.jerry.mvirxjava.R
 import com.jerry.mvirxjava.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -15,11 +16,16 @@ class MainActivity: AppCompatActivity() {
     private var _binding: ActivityMainBinding? = null
     private val binding get() = _binding!!
 
+    //firebase test only
+    // ADD THIS:
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         _binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        firebaseAnalytics = FirebaseAnalytics.getInstance(this)
     }
 
     //click "<" on app bar

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.jerry.mvirxjava.R
 import com.jerry.mvirxjava.base.BaseFragment
 import com.jerry.mvirxjava.base.ViewState
@@ -18,11 +19,14 @@ class ProductListFragment : BaseFragment(R.layout.fragment_product_list) {
     private var _binding: FragmentProductListBinding? = null
     private val binding get() = _binding!!
 
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         _binding = FragmentProductListBinding.bind(view)
+
+        firebaseAnalytics = FirebaseAnalytics.getInstance(view.context)
 
         //setup swipe Refresh
         binding?.swipeToRefresh?.apply {
@@ -46,10 +50,18 @@ class ProductListFragment : BaseFragment(R.layout.fragment_product_list) {
             } catch (e: Exception) {
                 e.printStackTrace()
             }
+
+            var bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID,"btn-test")
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, bundle)
+
         }
 
         _binding?.btnTestWithoutTry?.setOnClickListener {
            // val i = Integer.valueOf("A")
+            var bundle = Bundle()
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID,"btn-test-without")
+            firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, bundle)
         }
 
         viewModelObserve()
