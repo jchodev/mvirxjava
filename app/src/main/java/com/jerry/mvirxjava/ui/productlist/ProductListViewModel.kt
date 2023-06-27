@@ -12,7 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import com.jerry.mvirxjava.data.model.Product
 import com.jerry.mvirxjava.base.ViewState
 import com.jerry.mvirxjava.data.model.ProductListResponse
-import com.jerry.mvirxjava.data.repository.local.MyRespository
+
 import com.jerry.mvirxjava.ui.productlist.intent.ProductListIntent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.reactivex.Observable
@@ -22,8 +22,7 @@ import io.reactivex.functions.BiFunction
 
 @HiltViewModel
 class ProductListViewModel @Inject constructor(
-    private val networkRepository : NetworkRepository,
-    private val myRespository: MyRespository
+    private val networkRepository : NetworkRepository
 ) : ViewModel()  {
     private val disposables = CompositeDisposable()
     private val _viewState: MutableLiveData<ViewState<List<Product>>> = MutableLiveData<ViewState<List<Product>>>()
@@ -40,16 +39,17 @@ class ProductListViewModel @Inject constructor(
     }
 
     private fun getProductList(){
+        _viewState.value = ViewState.Loading
         disposables.add(
             Observable.zip (
                 networkRepository.getHoodieList(),
                 networkRepository.getSneakerList(),
                 BiFunction<ProductListResponse, ProductListResponse, List<Product>> { hoodies, sneakers ->
                     // here we get both the results at a time.
-                    var list = mutableListOf<Product>()
-                    if (hoodies!=null && hoodies.products.isNotEmpty())
+                    val list = mutableListOf<Product>()
+                    if (hoodies.products.isNotEmpty())
                         list.addAll(hoodies.products)
-                    if (sneakers!=null && sneakers.products.isNotEmpty())
+                    if (sneakers.products.isNotEmpty())
                         list.addAll(sneakers.products)
                     return@BiFunction list
                 })
@@ -62,20 +62,6 @@ class ProductListViewModel @Inject constructor(
         )
     }
 
-    private fun getProductList2(){
-
-        disposables.add(
-            networkRepository.getSneakerList()
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread()) //2. ...and the exact object type here
-                .doOnSubscribe { _viewState.value = ViewState.Loading }
-                .subscribe(
-                    { s-> _viewState.value = ViewState.Success(s.products) },
-                    { e-> _viewState.value = ViewState.Failure(e.toString()) },
-                    //{ println("onComplete")}
-                )
-        )
-    }
 
     override fun onCleared() {
         disposables.clear()

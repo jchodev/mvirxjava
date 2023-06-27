@@ -29,7 +29,7 @@ class ProductListFragment : BaseFragment(R.layout.fragment_product_list) {
         firebaseAnalytics = FirebaseAnalytics.getInstance(view.context)
 
         //setup swipe Refresh
-        binding?.swipeToRefresh?.apply {
+        binding.swipeToRefresh.apply {
             setOnRefreshListener {
                 isRefreshing = false
                 requestProductList()
@@ -51,7 +51,7 @@ class ProductListFragment : BaseFragment(R.layout.fragment_product_list) {
                 e.printStackTrace()
             }
 
-            var bundle = Bundle()
+            val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID,"btn-test")
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, bundle)
 
@@ -59,7 +59,7 @@ class ProductListFragment : BaseFragment(R.layout.fragment_product_list) {
 
         _binding?.btnTestWithoutTry?.setOnClickListener {
            // val i = Integer.valueOf("A")
-            var bundle = Bundle()
+            val bundle = Bundle()
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID,"btn-test-without")
             firebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_ITEM, bundle)
         }
@@ -68,7 +68,7 @@ class ProductListFragment : BaseFragment(R.layout.fragment_product_list) {
     }
 
     private fun viewModelObserve(){
-        viewModel?.viewState?.observe(this, Observer { viewState->
+        viewModel.viewState.observe(this, Observer { viewState->
             when (viewState) {
                 is ViewState.Success ->{
                     showLoading(false)
@@ -81,11 +81,13 @@ class ProductListFragment : BaseFragment(R.layout.fragment_product_list) {
                 is ViewState.Loading->{
                     showLoading(true)
                 }
+
+                else -> {}
             }
         })
     }
 
-    fun requestProductList(){
+    private fun requestProductList(){
         viewModel?.sendIntent(ProductListIntent.GetProductList)
     }
 
