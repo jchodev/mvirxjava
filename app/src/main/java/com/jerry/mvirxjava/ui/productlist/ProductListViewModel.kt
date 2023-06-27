@@ -31,7 +31,6 @@ class ProductListViewModel @Inject constructor(
 
     init {
         getProductList()
-        System.out.println("jerry>>" + myRespository.getSomething())
     }
 
     fun sendIntent(intent : ProductListIntent) {
